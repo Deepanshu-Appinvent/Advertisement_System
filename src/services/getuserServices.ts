@@ -1,5 +1,3 @@
-// UserService.ts
-
 import User from "../database/models/user";
 
 export const getUserById = async (userId: number): Promise<any | null> => {

@@ -1,5 +1,3 @@
-// UserController.ts
-
 import { Request, Response } from "express";
 import { getUserById } from "../services/getuserServices";
 
@@ -16,6 +14,8 @@ export const getUserByIdController = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Failed to get user" });
   }
 };
+
+
 
 // export const getAllUsersController = async (req: Request, res: Response) => {
 //   try {

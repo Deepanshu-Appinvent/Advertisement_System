@@ -1,4 +1,3 @@
-// services/signupService.js
 import User from "../database/models/user";
 import bcrypt from "bcrypt";
 

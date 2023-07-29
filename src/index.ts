@@ -6,6 +6,8 @@ import loginRoute from './routes/loginRoute';
 import forgetPassword from './routes/ForgetPasswordRoute';
 import getuser from './routes/getuserRoute';
 import updateuser from './routes/updateuserRoute'
+import deleteAccountRoutes from "./routes/deleteAccountRoute";
+
 
 
 // import postController from './src/controllers/postController';
@@ -23,6 +25,8 @@ app.use('/api', loginRoute);
 app.use('/api', forgetPassword);
 app.use('/api', getuser);
 app.use('/api', updateuser);
+app.use('/api',deleteAccountRoutes);
+
 // app.use('/delcomment', delcommentRoutes);
 
 
