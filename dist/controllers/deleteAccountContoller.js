@@ -1,5 +1,4 @@
 "use strict";
-// controllers/deleteAccountController.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -16,7 +15,7 @@ function deleteAccount(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { email } = req.body;
         try {
-            yield (0, deleteAccountService_1.deleteAccountByEmail)(email);
+            yield (0, deleteAccountService_1.delete_Service)(email);
             res.status(200).json({ message: "Account deleted successfully" });
         }
         catch (error) {

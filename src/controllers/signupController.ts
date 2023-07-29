@@ -2,24 +2,14 @@ import { Request, Response } from "express";
 import signupService from "../services/signupService";
 
 async function signUpController(req: Request, res: Response) {
-  const {
-    username,
-    email,
-    password,
-    address,
-    status,
-    profile,
-    mobNumber,
-    gender,
-    dob
-  } = req.body;
+  const { username, email, password, status, profile, mobNumber, gender, dob } =
+    req.body;
 
   try {
     const user = await signupService.signUp(
       username,
       email,
       password,
-      address,
       status,
       profile,
       mobNumber,
@@ -34,5 +24,3 @@ async function signUpController(req: Request, res: Response) {
 }
 
 export default signUpController;
-
-

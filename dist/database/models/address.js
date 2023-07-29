@@ -6,12 +6,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const db_connection_1 = __importDefault(require("../db_connection"));
-const user_1 = __importDefault(require("./user")); // Import the User model
+const user_1 = __importDefault(require("./user"));
 const Address = db_connection_1.default.define("address", {
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+    },
+    user_id: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: user_1.default,
+            key: "id",
+        },
     },
     houseno: {
         type: sequelize_1.DataTypes.STRING,
@@ -50,14 +58,6 @@ const Address = db_connection_1.default.define("address", {
         allowNull: false,
         defaultValue: true,
     },
-    user_id: {
-        type: sequelize_1.DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: user_1.default,
-            key: "id",
-        },
-    },
     address_type: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: true,
@@ -65,7 +65,7 @@ const Address = db_connection_1.default.define("address", {
 }, {
     timestamps: false,
 });
-Address.belongsTo(user_1.default, {
-    foreignKey: "user_id"
-});
+// Address.belongsTo(User, {
+//   foreignKey: "user_id"
+// });
 exports.default = Address;

@@ -3,6 +3,6 @@ import { deleteAccount } from "../controllers/deleteAccountContoller";
 
 const router = express.Router();
 
-router.delete("/delete-account", deleteAccount);
+router.delete("/delete", deleteAccount);
 
 export default router;

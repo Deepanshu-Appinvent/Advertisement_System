@@ -12,6 +12,7 @@ const ForgetPasswordRoute_1 = __importDefault(require("./routes/ForgetPasswordRo
 const getuserRoute_1 = __importDefault(require("./routes/getuserRoute"));
 const updateuserRoute_1 = __importDefault(require("./routes/updateuserRoute"));
 const deleteAccountRoute_1 = __importDefault(require("./routes/deleteAccountRoute"));
+const addAddressRoute_1 = __importDefault(require("./routes/addAddressRoute"));
 // import postController from './src/controllers/postController';
 // import commentController from './src/controllers/commentController';
 const app = (0, express_1.default)();
@@ -25,6 +26,7 @@ app.use('/api', ForgetPasswordRoute_1.default);
 app.use('/api', getuserRoute_1.default);
 app.use('/api', updateuserRoute_1.default);
 app.use('/api', deleteAccountRoute_1.default);
+app.use('/api', addAddressRoute_1.default);
 // app.use('/delcomment', delcommentRoutes);
 db_connection_1.default.authenticate()
     .then(() => {

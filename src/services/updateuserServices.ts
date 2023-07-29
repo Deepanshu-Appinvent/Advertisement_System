@@ -11,7 +11,6 @@ export const updateUser = async (userId: number, userData: any): Promise<any | n
     user.username = userData.username || user.username;
     user.email = userData.email || user.email;
     user.password = userData.password || user.password;
-    user.address = userData.address || user.address;
     
 
     await user.save();

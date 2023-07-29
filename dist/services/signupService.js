@@ -12,10 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// services/signupService.js
 const user_1 = __importDefault(require("../database/models/user"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-function signUp(username, email, password, address, status, profile, mobNumber, gender, dob) {
+function signUp(username, email, password, status, profile, mobNumber, gender, dob) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const saltRounds = 10;
@@ -24,7 +23,6 @@ function signUp(username, email, password, address, status, profile, mobNumber, 
                 username: username,
                 email: email,
                 password: hashedPassword,
-                address: address,
                 status: status,
                 profile: profile,
                 mobNumber: mobNumber,

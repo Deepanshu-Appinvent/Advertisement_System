@@ -1,6 +1,6 @@
 import User from "../database/models/user";
 
-export async function deleteAccountByEmail(email: string): Promise<void> {
+export async function delete_Service(email: string): Promise<void> {
   try {
     const user = await User.findOne({ where: { email } });
 

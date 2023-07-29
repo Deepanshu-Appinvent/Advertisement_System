@@ -25,10 +25,6 @@ const User = db_connection_1.default.define('users', {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    address: {
-        type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
-    },
     status: {
         type: sequelize_1.DataTypes.BOOLEAN,
         allowNull: false,
@@ -55,4 +51,7 @@ const User = db_connection_1.default.define('users', {
     createdAt: 'created_at',
     updatedAt: 'updated_at'
 });
+// User.hasMany(Address, {
+//   foreignKey: "user_id"
+// });
 exports.default = User;

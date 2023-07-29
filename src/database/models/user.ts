@@ -2,13 +2,15 @@
 
 import { DataTypes, Model, Optional } from 'sequelize';
 import dbConn from '../db_connection';
+import Address from './address';
+
 
 interface UserAttributes {
   id: number;
   username: string;
   email: string;
   password: string;
-  address: string;
+
   status: boolean;
   profile: Buffer;
   mobNumber: string;
@@ -41,10 +43,6 @@ const User = dbConn.define<UserModel>(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     status: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -73,6 +71,10 @@ const User = dbConn.define<UserModel>(
     updatedAt: 'updated_at'
   }
 );
+
+// User.hasMany(Address, {
+//   foreignKey: "user_id"
+// });
 
 export default User;
 

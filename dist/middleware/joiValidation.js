@@ -18,7 +18,6 @@ const signUpSchema = joi_1.default.object({
     username: joi_1.default.string().min(3).max(20).required(),
     email: joi_1.default.string().email().required(),
     password: joi_1.default.string().min(6).required(),
-    address: joi_1.default.string().required(),
     status: joi_1.default.boolean().required(),
     profile: joi_1.default.string().required(),
     mobNumber: joi_1.default.string().required(),

@@ -12,23 +12,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = void 0;
+exports.addAddressForUser = void 0;
 const user_1 = __importDefault(require("../database/models/user"));
-const updateUser = (userId, userData) => __awaiter(void 0, void 0, void 0, function* () {
+const addAddressService_1 = require("../services/addAddressService");
+const addAddressForUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const { houseno, streetno, area, landmark, city, country, zip_code, state, status, address_type, } = req.body;
     try {
         const user = yield user_1.default.findByPk(userId);
         if (!user) {
-            throw new Error('User not found');
+            return res.status(404).json({ error: "User not found" });
         }
-        user.username = userData.username || user.username;
-        user.email = userData.email || user.email;
-        user.password = userData.password || user.password;
-        yield user.save();
-        return user;
+        const addressData = {
+            user_id: user.id,
+            houseno,
+            streetno,
+            area,
+            landmark,
+            city,
+            country,
+            zip_code,
+            state,
+            status,
+            address_type,
+        };
+        const address = yield (0, addAddressService_1.createAddressForUser)(user, addressData);
+        console.log(address);
+        return res.status(201).json(address);
     }
     catch (error) {
-        console.error('Error updating user:', error);
-        throw error;
+        console.error("Error adding address for user:", error);
+        return res.status(500).json({ error: "Internal server error" });
     }
 });
-exports.updateUser = updateUser;
+exports.addAddressForUser = addAddressForUser;

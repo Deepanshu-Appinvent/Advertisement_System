@@ -12,20 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delete_Service = void 0;
-const user_1 = __importDefault(require("../database/models/user"));
-function delete_Service(email) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const user = yield user_1.default.findOne({ where: { email } });
-            if (!user) {
-                throw new Error("User not found");
-            }
-            yield user.destroy();
-        }
-        catch (error) {
-            throw error;
-        }
-    });
-}
-exports.delete_Service = delete_Service;
+exports.createAddressForUser = void 0;
+const address_1 = __importDefault(require("../database/models/address"));
+const createAddressForUser = (user, addressData) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const address = yield address_1.default.create(addressData);
+        return address;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.createAddressForUser = createAddressForUser;

@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const signupService_1 = __importDefault(require("../services/signupService"));
 function signUpController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { username, email, password, address, status, profile, mobNumber, gender, dob } = req.body;
+        const { username, email, password, status, profile, mobNumber, gender, dob } = req.body;
         try {
-            const user = yield signupService_1.default.signUp(username, email, password, address, status, profile, mobNumber, gender, dob);
+            const user = yield signupService_1.default.signUp(username, email, password, status, profile, mobNumber, gender, dob);
             res.status(200).json({ message: "Signup successful", user });
         }
         catch (error) {

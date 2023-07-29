@@ -2,7 +2,7 @@
 
 import { DataTypes, Model, Optional } from "sequelize";
 import dbConn from "../db_connection";
-import User from "./user"; // Import the User model
+import User from "./user"; 
 
 interface AddressAttributes {
   id: number;
@@ -32,6 +32,14 @@ const Address = dbConn.define<AddressModel>(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
     },
     houseno: {
       type: DataTypes.STRING,
@@ -70,14 +78,7 @@ const Address = dbConn.define<AddressModel>(
       allowNull: false,
       defaultValue: true,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: User,
-        key: "id",
-      },
-    },
+    
     address_type: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -88,8 +89,8 @@ const Address = dbConn.define<AddressModel>(
   }
 );
 
-Address.belongsTo(User, {
-  foreignKey: "user_id"
-});
+// Address.belongsTo(User, {
+//   foreignKey: "user_id"
+// });
 
 export default Address;

@@ -7,6 +7,8 @@ import forgetPassword from './routes/ForgetPasswordRoute';
 import getuser from './routes/getuserRoute';
 import updateuser from './routes/updateuserRoute'
 import deleteAccountRoutes from "./routes/deleteAccountRoute";
+import addressRouter from './routes/addAddressRoute';
+
 
 
 
@@ -26,6 +28,8 @@ app.use('/api', forgetPassword);
 app.use('/api', getuser);
 app.use('/api', updateuser);
 app.use('/api',deleteAccountRoutes);
+app.use('/api', addressRouter); 
+
 
 // app.use('/delcomment', delcommentRoutes);
 
