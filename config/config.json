@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "Commando@123",
+    "database": "Advertisement",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "Commando@123",
+    "database": "Advertisement",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "Commando@123",
+    "database": "Advertisement",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
