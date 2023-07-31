@@ -40,8 +40,8 @@ const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
 const swaggerDocument = YAML.load(path.join(__dirname, './swagger.yaml'));
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
-app.use(authUserRoute_1.default);
-app.use(authProductRoute_1.default);
+app.use("/api", authUserRoute_1.default);
+app.use("/api", authProductRoute_1.default);
 app.use("/api", addAddressRoute_1.default);
 app.use("/api", getCategories_1.default);
 db_connection_1.default

@@ -12,33 +12,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const promises_1 = __importDefault(require("fs/promises"));
-const path_1 = __importDefault(require("path"));
-const user_1 = __importDefault(require("../database/models/user"));
-function addPhoto(filename) {
+exports.filterProductsByPrice = void 0;
+const sequelize_1 = require("sequelize");
+const product_1 = __importDefault(require("../database/models/product"));
+function filterProductsByPrice(budgetPrice) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const projectRoot = process.cwd();
-            const uploadsFolder = path_1.default.join(projectRoot, 'uploads');
-            const filePath = path_1.default.join(uploadsFolder, filename);
-            try {
-                yield promises_1.default.access(filePath);
-            }
-            catch (err) {
-                throw new Error('File not found.');
-            }
-            const fileBuffer = yield promises_1.default.readFile(filePath);
-            const user = yield user_1.default.findOne({ where: { id: 1 } });
-            if (user) {
-                user.profile = fileBuffer;
-                yield user.save();
-            }
-            return user;
+            const filteredProducts = yield product_1.default.findAll({
+                where: {
+                    base_price: {
+                        [sequelize_1.Op.lte]: budgetPrice,
+                    },
+                },
+            });
+            return filteredProducts;
         }
         catch (error) {
-            console.error(error);
-            throw error;
+            console.log(error);
+            throw new Error("Failed to filter products: ");
         }
     });
 }
-exports.default = addPhoto;
+exports.filterProductsByPrice = filterProductsByPrice;

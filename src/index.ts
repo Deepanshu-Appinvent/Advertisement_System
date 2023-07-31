@@ -16,8 +16,8 @@ app.use(bodyParser.json());
 const swaggerDocument = YAML.load(path.join(__dirname, './swagger.yaml')); 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(user);
-app.use(product);
+app.use("/api",user);
+app.use("/api",product);
 app.use("/api", addressRouter);
 app.use("/api", categoriesRouter);
 

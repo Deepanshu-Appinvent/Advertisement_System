@@ -8,6 +8,8 @@ paths:
   api/signup:
     post:
       summary: Sign up a new user
+      tags:
+        - Users
       requestBody:
         required: true
         content:
@@ -76,6 +78,8 @@ paths:
   api/login:
     post:
       summary: User login
+      tags:
+        - Users
       requestBody:
         required: true
         content:
@@ -132,6 +136,8 @@ paths:
   api/generatepass:
     post:
       summary: Generate OTP
+      tags:
+        - Users
       requestBody:
         required: true
         content:
@@ -178,6 +184,8 @@ paths:
   api/checkpass:
     post:
       summary: Update password using OTP
+      tags:
+        - Users
       requestBody:
         required: true
         content:
@@ -235,6 +243,8 @@ paths:
   api/user/{userId}:
     get:
       summary: Get user by ID
+      tags:
+        - Users
       parameters:
         - in: path
           name: userId
@@ -273,59 +283,63 @@ paths:
                     type: string
                     description: Error message
 
-  # /users/{userId}:
-  #   put:
-  #     summary: Update user by ID
-  #     parameters:
-  #       - in: path
-  #         name: userId
-  #         required: true
-  #         description: ID of the user to update
-  #         schema:
-  #           type: integer
-  #     requestBody:
-  #       required: true
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/UserUpdateData'
-  #     responses:
-  #       '200':
-  #         description: User updated successfully
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: string
-  #                   description: Success message
-  #                 user:
-  #                   $ref: '#/components/schemas/User'
-  #       '404':
-  #         description: User not found
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: string
-  #                   description: Error message
-  #       '500':
-  #         description: Failed to update user due to an error
-  #         content:
-  #           application/json:
-  #             schema:
-  #               type: object
-  #               properties:
-  #                 message:
-  #                   type: string
-  #                   description: Error message
+  /users/{userId}:
+    put:
+      summary: Update user by ID
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to update
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdateData"
+      responses:
+        "200":
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  user:
+                    $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to update user due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
 
-  /deleteAccount:
+  api/deleteaccount:
     delete:
       summary: Delete user account
+      tags:
+        - Users
       requestBody:
         required: true
         content:
@@ -375,6 +389,8 @@ paths:
   /add_photo:
     post:
       summary: Add profile photo
+      tags:
+        - Users
       requestBody:
         required: true
         content:
@@ -424,9 +440,11 @@ paths:
                     type: string
                     description: Error message
 
-  /users/{userId}/address:
+  /api/{userId}/address:
     post:
       summary: Add address for a user
+      tags:
+        - Addresses
       parameters:
         - in: path
           name: userId
@@ -468,9 +486,11 @@ paths:
                     type: string
                     description: Error message
 
-  /categories:
+  api/categories:
     get:
       summary: Fetch categories
+      tags:
+        - Categories
       responses:
         "200":
           description: Categories fetched successfully
@@ -491,9 +511,11 @@ paths:
                     type: string
                     description: Error message
 
-  /addProductDetails:
+  api/addproduct:
     post:
       summary: Add product details
+      tags:
+        - Products
       requestBody:
         required: true
         content:
@@ -544,9 +566,11 @@ paths:
                     type: string
                     description: Error message
 
-  /bidOnProduct:
+  api/bid:
     post:
       summary: Bid on a product
+      tags:
+        - Products
       requestBody:
         required: true
         content:
@@ -595,9 +619,11 @@ paths:
                     type: string
                     description: Error message
 
-  /updateProduct:
+  api/updateproduct:
     put:
       summary: Update product
+      tags:
+        - Products
       requestBody:
         required: true
         content:
@@ -646,9 +672,11 @@ paths:
                     type: string
                     description: Error message
 
-  /deleteProduct:
+  api/deleteproduct:
     delete:
       summary: Delete product
+      tags:
+        - Products
       requestBody:
         required: true
         content:
@@ -688,6 +716,51 @@ paths:
                     description: Error message
         "500":
           description: Failed to delete product due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+
+    api/filterproducts:
+    post:
+      summary: Filter products by price
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                budgetPrice:
+                  type: number
+                  description: The budget price to filter products
+              required:
+                - budgetPrice
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FilterProduct"
+        "400":
+          description: Bad Request - Missing budgetPrice in the request body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to filter products due to an error
           content:
             application/json:
               schema:
@@ -954,3 +1027,22 @@ components:
         product_id:
           type: integer
           description: ID of the product to be deleted
+
+    FilterProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Product ID
+        name:
+          type: string
+          description: Name of the product
+        description:
+          type: string
+          description: Description of the product
+        base_price:
+          type: number
+          description: Base price of the product
+        category:
+          type: string
+          description: Category of the product

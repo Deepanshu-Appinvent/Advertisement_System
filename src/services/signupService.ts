@@ -1,3 +1,4 @@
+import { buffer } from "stream/consumers";
 import User from "../database/models/user";
 import bcrypt from "bcrypt";
 
@@ -6,7 +7,7 @@ async function signUp(
   email: string,
   password: string,
   status: boolean,
-  profile: Buffer,
+  profile: Blob,
   mobNumber: string,
   gender: string,
   dob: Date

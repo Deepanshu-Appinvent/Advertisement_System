@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const loginController_1 = require("../controllers/loginController");
-//import { joi_login} from "../middleware/joiValidation";
+const joiValidation_1 = require("../middleware/joiValidation");
 const router = express_1.default.Router();
-router.post('/login', loginController_1.login);
+router.post('/login', joiValidation_1.joi_login, loginController_1.login);
 exports.default = router;

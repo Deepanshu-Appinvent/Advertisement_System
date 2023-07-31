@@ -10,9 +10,8 @@ interface UserAttributes {
   username: string;
   email: string;
   password: string;
-
   status: boolean;
-  profile: Buffer;
+  profile: Blob;
   mobNumber: string;
   gender: string;
   dob: Date;
