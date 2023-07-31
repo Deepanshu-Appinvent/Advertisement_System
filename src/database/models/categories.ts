@@ -7,7 +7,7 @@ interface CategoryAttributes {
   subcategories: string;
   createdAt: Date;
   updatedAt: Date;
-  image: Buffer;
+  //image: Buffer;
 }
 
 interface CategoryCreationAttributes
@@ -43,10 +43,10 @@ const Category = dbConn.define<CategoryModel>(
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    image: {
-      type: DataTypes.BLOB,
-      allowNull: true,
-    },
+    // image: {
+    //   type: DataTypes.BLOB,
+    //   allowNull: true,
+    // },
   },
   {
     timestamps: true,
@@ -54,5 +54,7 @@ const Category = dbConn.define<CategoryModel>(
     updatedAt: "updatedAt",
   }
 );
+
+
 
 export default Category;

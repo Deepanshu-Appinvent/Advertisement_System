@@ -12,23 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = void 0;
-const user_1 = __importDefault(require("../database/models/user"));
-const updateUser = (userId, userData) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const user = yield user_1.default.findByPk(userId);
-        if (!user) {
-            throw new Error("User not found");
+exports.addProductDetails = void 0;
+const product_1 = __importDefault(require("../database/models/product"));
+function addProductDetails(productData) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const product = yield product_1.default.create(productData);
+            return product;
         }
-        user.username = userData.username || user.username;
-        user.email = userData.email || user.email;
-        user.password = userData.password || user.password;
-        yield user.save();
-        return user;
-    }
-    catch (error) {
-        console.error("Error updating user:", error);
-        throw error;
-    }
-});
-exports.updateUser = updateUser;
+        catch (error) {
+            throw new Error("Failed to add product details: " + error);
+        }
+    });
+}
+exports.addProductDetails = addProductDetails;

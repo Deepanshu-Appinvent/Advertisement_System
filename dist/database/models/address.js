@@ -68,4 +68,5 @@ const Address = db_connection_1.default.define("address", {
 // Address.belongsTo(User, {
 //   foreignKey: "user_id"
 // });
+//dbConn.sync({ alter: true })
 exports.default = Address;

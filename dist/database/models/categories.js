@@ -29,10 +29,10 @@ const Category = db_connection_1.default.define("categories", {
         allowNull: false,
         defaultValue: sequelize_1.DataTypes.NOW,
     },
-    image: {
-        type: sequelize_1.DataTypes.BLOB,
-        allowNull: true,
-    },
+    // image: {
+    //   type: DataTypes.BLOB,
+    //   allowNull: true,
+    // },
 }, {
     timestamps: true,
     createdAt: "createdAt",

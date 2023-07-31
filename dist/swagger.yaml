@@ -1,0 +1,956 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: OLX API
+  description: API for an OLX application
+
+paths:
+  api/signup:
+    post:
+      summary: Sign up a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: Username of the user
+                email:
+                  type: string
+                  format: email
+                  description: Email of the user
+                password:
+                  type: string
+                  description: Password of the user
+                status:
+                  type: boolean
+                  description: User status (active/inactive)
+                profile:
+                  type: string
+                  description: User profile image in base64 encoded format
+                mobNumber:
+                  type: string
+                  description: Mobile number of the user
+                gender:
+                  type: string
+                  description: Gender of the user
+                dob:
+                  type: string
+                  format: date
+                  description: Date of birth of the user
+              required:
+                - username
+                - email
+                - password
+
+      responses:
+        "200":
+          description: Successful signup
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  user:
+                    $ref: "#/components/schemas/User"
+        "500":
+          description: Signup failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+                  error:
+                    type: object
+                    description: Details of the error
+
+  api/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Email of the user
+                password:
+                  type: string
+                  description: Password of the user
+              required:
+                - email
+                - password
+
+      responses:
+        "201":
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  user:
+                    type: object
+                    description: Details of the logged-in user, including token
+                    properties:
+                      token:
+                        type: string
+                        description: JWT token for authentication
+                      user:
+                        $ref: "#/components/schemas/User"
+        "200":
+          description: Invalid Credentials
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Invalid Credentials
+        "500":
+          description: Login failed due to an error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unable to login due to some error!
+
+  api/generatepass:
+    post:
+      summary: Generate OTP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Email of the user
+              required:
+                - email
+
+      responses:
+        "201":
+          description: OTP generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  user:
+                    type: string
+                    description: Email of the user to whom OTP has been generated
+        "200":
+          description: Invalid Credentials
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Invalid Credentials
+        "500":
+          description: OTP generation failed due to an error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unable to Generate OTP due to some error!
+
+  api/checkpass:
+    post:
+      summary: Update password using OTP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Email of the user
+                otp:
+                  type: string
+                  description: OTP sent to the user's email
+                newpassword:
+                  type: string
+                  description: New password to be set
+              required:
+                - email
+                - otp
+                - newpassword
+
+      responses:
+        "201":
+          description: Password updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  user:
+                    type: string
+                    description: Email of the user whose password has been updated
+                  newpassword:
+                    type: string
+                    description: The new password that has been set
+        "200":
+          description: Invalid OTP or Email
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Invalid OTP or Email
+        "500":
+          description: Password update failed due to an error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unable to update password due to some error!
+
+  api/user/{userId}:
+    get:
+      summary: Get user by ID
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to fetch
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User details fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to get user due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+
+  # /users/{userId}:
+  #   put:
+  #     summary: Update user by ID
+  #     parameters:
+  #       - in: path
+  #         name: userId
+  #         required: true
+  #         description: ID of the user to update
+  #         schema:
+  #           type: integer
+  #     requestBody:
+  #       required: true
+  #       content:
+  #         application/json:
+  #           schema:
+  #             $ref: '#/components/schemas/UserUpdateData'
+  #     responses:
+  #       '200':
+  #         description: User updated successfully
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #                   description: Success message
+  #                 user:
+  #                   $ref: '#/components/schemas/User'
+  #       '404':
+  #         description: User not found
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #                   description: Error message
+  #       '500':
+  #         description: Failed to update user due to an error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               type: object
+  #               properties:
+  #                 message:
+  #                   type: string
+  #                   description: Error message
+
+  /deleteAccount:
+    delete:
+      summary: Delete user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Email of the user to delete
+              required:
+                - email
+
+      responses:
+        "200":
+          description: Account deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "500":
+          description: Failed to delete account due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+
+  /add_photo:
+    post:
+      summary: Add profile photo
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photo:
+                  type: string
+                  format: binary
+                  description: Profile photo to upload (JPEG format)
+              required:
+                - photo
+
+      responses:
+        "200":
+          description: Photo uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  blob:
+                    type: string
+                    description: Blob representation of the uploaded photo
+        "400":
+          description: Bad Request - No photo uploaded or multer error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to upload photo due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+
+  /users/{userId}/address:
+    post:
+      summary: Add address for a user
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: ID of the user to add the address for
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddressData"
+      responses:
+        "201":
+          description: Address added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Address"
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to add address due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+
+  /categories:
+    get:
+      summary: Fetch categories
+      responses:
+        "200":
+          description: Categories fetched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+        "500":
+          description: Failed to fetch categories due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message
+
+  /addProductDetails:
+    post:
+      summary: Add product details
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductData"
+      responses:
+        "200":
+          description: Product details added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+                  product:
+                    $ref: "#/components/schemas/Product"
+        "400":
+          description: Bad Request - Missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "404":
+          description: User or address not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to add product details due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+
+  /bidOnProduct:
+    post:
+      summary: Bid on a product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BidData"
+      responses:
+        "200":
+          description: Bid placed successfully or bidding information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message or bidding information
+        "400":
+          description: Bad Request - Missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "404":
+          description: User or product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to place bid due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+
+  /updateProduct:
+    put:
+      summary: Update product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProductData"
+      responses:
+        "200":
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "400":
+          description: Bad Request - Missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to update product due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+
+  /deleteProduct:
+    delete:
+      summary: Delete product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteProductData"
+      responses:
+        "200":
+          description: Product deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message
+        "400":
+          description: Bad Request - Missing product ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+        "500":
+          description: Failed to delete product due to an error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: User ID
+        username:
+          type: string
+          description: Username of the user
+        email:
+          type: string
+          description: Email of the user
+        status:
+          type: boolean
+          description: User status (active/inactive)
+        profile:
+          type: string
+          description: URL or path to the user's profile image
+        mobNumber:
+          type: string
+          description: Mobile number of the user
+        gender:
+          type: string
+          description: Gender of the user
+        dob:
+          type: string
+          format: date
+          description: Date of birth of the user
+
+    UserUpdateData:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Updated username (optional)
+        email:
+          type: string
+          description: Updated email (optional)
+        password:
+          type: string
+          description: Updated password (optional)
+        status:
+          type: boolean
+          description: Updated user status (optional)
+        profile:
+          type: string
+          description: Updated URL or path to the user's profile image (optional)
+        mobNumber:
+          type: string
+          description: Updated mobile number of the user (optional)
+        gender:
+          type: string
+          description: Updated gender of the user (optional)
+        dob:
+          type: string
+          format: date
+          description: Updated date of birth of the user (optional)
+
+    AddressData:
+      type: object
+      properties:
+        houseno:
+          type: string
+          description: House number of the address
+        streetno:
+          type: integer
+          description: Street number of the address
+        area:
+          type: string
+          description: Area of the address
+        landmark:
+          type: string
+          description: Landmark near the address
+        city:
+          type: string
+          description: City of the address
+        country:
+          type: string
+          description: Country of the address
+        zip_code:
+          type: integer
+          description: ZIP code of the address
+        state:
+          type: string
+          description: State of the address
+        status:
+          type: boolean
+          description: Address status (active/inactive)
+        address_type:
+          type: string
+          description: Type of the address
+
+    Address:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Address ID
+        user_id:
+          type: integer
+          description: ID of the user associated with the address
+        houseno:
+          type: string
+          description: House number of the address
+        streetno:
+          type: integer
+          description: Street number of the address
+        area:
+          type: string
+          description: Area of the address
+        landmark:
+          type: string
+          description: Landmark near the address
+        city:
+          type: string
+          description: City of the address
+        country:
+          type: string
+          description: Country of the address
+        zip_code:
+          type: integer
+          description: ZIP code of the address
+        state:
+          type: string
+          description: State of the address
+        status:
+          type: boolean
+          description: Address status (active/inactive)
+        address_type:
+          type: string
+          description: Type of the address
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Category ID
+        name:
+          type: string
+          description: Category name
+
+    ProductData:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the product
+        description:
+          type: string
+          description: Description of the product
+        category_id:
+          type: integer
+          description: ID of the category the product belongs to
+        price:
+          type: number
+          description: Price of the product
+        stock:
+          type: integer
+          description: Stock quantity of the product
+        seller_id:
+          type: integer
+          description: ID of the seller who is adding the product
+        image_url:
+          type: string
+          description: URL or path to the product image
+        status:
+          type: boolean
+          description: Product status (active/inactive)
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Product ID
+        title:
+          type: string
+          description: Title of the product
+        description:
+          type: string
+          description: Description of the product
+        category_id:
+          type: integer
+          description: ID of the category the product belongs to
+        price:
+          type: number
+          description: Price of the product
+        stock:
+          type: integer
+          description: Stock quantity of the product
+        seller_id:
+          type: integer
+          description: ID of the seller who is adding the product
+        image_url:
+          type: string
+          description: URL or path to the product image
+        status:
+          type: boolean
+          description: Product status (active/inactive)
+
+    BidData:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          description: ID of the product the user is bidding on
+        user_id:
+          type: integer
+          description: ID of the user placing the bid
+        bid_amount:
+          type: number
+          description: Amount of the bid
+        bid_time:
+          type: string
+          format: date-time
+          description: Timestamp of when the bid was placed
+
+    UpdateProductData:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          description: ID of the product to be updated
+        title:
+          type: string
+          description: Updated title of the product (optional)
+        description:
+          type: string
+          description: Updated description of the product (optional)
+        category_id:
+          type: integer
+          description: Updated ID of the category the product belongs to (optional)
+        price:
+          type: number
+          description: Updated price of the product (optional)
+        stock:
+          type: integer
+          description: Updated stock quantity of the product (optional)
+        seller_id:
+          type: integer
+          description: Updated ID of the seller who is adding the product (optional)
+        image_url:
+          type: string
+          description: Updated URL or path to the product image (optional)
+        status:
+          type: boolean
+          description: Updated product status (active/inactive) (optional)
+
+    DeleteProductData:
+      type: object
+      properties:
+        product_id:
+          type: integer
+          description: ID of the product to be deleted

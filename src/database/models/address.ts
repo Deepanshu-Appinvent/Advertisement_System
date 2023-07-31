@@ -93,4 +93,6 @@ const Address = dbConn.define<AddressModel>(
 //   foreignKey: "user_id"
 // });
 
+//dbConn.sync({ alter: true })
+
 export default Address;

@@ -12,23 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUser = void 0;
-const user_1 = __importDefault(require("../database/models/user"));
-const updateUser = (userId, userData) => __awaiter(void 0, void 0, void 0, function* () {
+const express_1 = __importDefault(require("express"));
+const router = express_1.default.Router();
+const categories_1 = __importDefault(require("../database/models/categories"));
+router.get("/categories", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield user_1.default.findByPk(userId);
-        if (!user) {
-            throw new Error("User not found");
-        }
-        user.username = userData.username || user.username;
-        user.email = userData.email || user.email;
-        user.password = userData.password || user.password;
-        yield user.save();
-        return user;
+        const categories = yield categories_1.default.findAll();
+        console.log(categories);
+        res.json(categories);
     }
     catch (error) {
-        console.error("Error updating user:", error);
-        throw error;
+        console.error("Error fetching categories:", error);
+        res.status(500).json({ message: "Failed to fetch categories" });
     }
-});
-exports.updateUser = updateUser;
+}));
+exports.default = router;

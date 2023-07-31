@@ -2,19 +2,22 @@
 
 import { DataTypes, Model, Optional } from "sequelize";
 import dbConn from "../db_connection";
+import User from "./user";
+import Category from "./categories";
+import Address from "./address";
 
 interface ProductAttributes {
   id: number;
+  user_id: number;
   product_name: string;
   description: string;
-  images: Buffer[];
-  Bidding: boolean;
-  Bidderid: number;
+  bidding: number;
+  bidder_id: number;
   base_price: number;
   title: string;
-  user_id: number;
   category_id: number;
   address_id: number;
+  //images: Buffer[];
 }
 
 interface ProductCreationAttributes extends Optional<ProductAttributes, "id"> {}
@@ -31,6 +34,14 @@ const Product = dbConn.define<ProductModel>(
       primaryKey: true,
       autoIncrement: true,
     },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: User,
+        key: "id",
+      },
+    },
     product_name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -39,39 +50,48 @@ const Product = dbConn.define<ProductModel>(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    images: {
-      type: DataTypes.ARRAY(DataTypes.BLOB),
-      allowNull: true,
-    },
-    Bidding: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    Bidderid: {
+
+    bidding: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      
+    },
+    bidder_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: User,
+        key: "id",
+      },
     },
     base_price: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     title: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     category_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      references: {
+        model: Category,
+        key: "id",
+      },
     },
     address_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      references: {
+        model: Address,
+        key: "id",
+      },
     },
+    // images: {
+    //   type: DataTypes.ARRAY(DataTypes.BLOB),
+    //   allowNull: true,
+    // },
   },
   {
     timestamps: true,
@@ -79,5 +99,7 @@ const Product = dbConn.define<ProductModel>(
     updatedAt: "updated_at",
   }
 );
+
+// dbConn.sync({ alter: true })
 
 export default Product;

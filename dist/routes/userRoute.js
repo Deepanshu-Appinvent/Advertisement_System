@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const signupRoute_1 = __importDefault(require("./signupRoute"));
+const loginRoute_1 = __importDefault(require("./loginRoute"));
+const ForgetPasswordRoute_1 = __importDefault(require("./ForgetPasswordRoute"));
+const getuserRoute_1 = __importDefault(require("./getuserRoute"));
+const updateuserRoute_1 = __importDefault(require("./updateuserRoute"));
+const deleteAccountRoute_1 = __importDefault(require("./deleteAccountRoute"));
+const router = express_1.default.Router();
+router.use('/api', signupRoute_1.default);
+router.use('/api', loginRoute_1.default);
+router.use('/api', ForgetPasswordRoute_1.default);
+router.use('/api', getuserRoute_1.default);
+router.use('/api', updateuserRoute_1.default);
+router.use('/api', deleteAccountRoute_1.default);
+exports.default = router;

@@ -1,47 +1,35 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import dbConn from './database/db_connection';
-import signupRoute from './routes/signupRoute';
-import loginRoute from './routes/loginRoute';
-import forgetPassword from './routes/ForgetPasswordRoute';
-import getuser from './routes/getuserRoute';
-import updateuser from './routes/updateuserRoute'
-import deleteAccountRoutes from "./routes/deleteAccountRoute";
-import addressRouter from './routes/addAddressRoute';
-
-
-
-
-// import postController from './src/controllers/postController';
-// import commentController from './src/controllers/commentController';
+import express from "express";
+import bodyParser from "body-parser";
+import dbConn from "./database/db_connection";
+import user from "./routes/authUserRoute";
+import product from "./routes/authProductRoute";
+import addressRouter from "./routes/addAddressRoute";
+import categoriesRouter from "./routes/getCategories";
+import swaggerUi from 'swagger-ui-express';
+import * as YAML from 'yamljs';
+import * as path from 'path';
 
 const app = express();
 app.use(bodyParser.json());
 
-// Define routes
-// app.post('/posts', postController);
-// app.post('/comments', commentController);
 
-app.use('/api', signupRoute);
-app.use('/api', loginRoute);
-app.use('/api', forgetPassword);
-app.use('/api', getuser);
-app.use('/api', updateuser);
-app.use('/api',deleteAccountRoutes);
-app.use('/api', addressRouter); 
+const swaggerDocument = YAML.load(path.join(__dirname, './swagger.yaml')); 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.use(user);
+app.use(product);
+app.use("/api", addressRouter);
+app.use("/api", categoriesRouter);
 
-// app.use('/delcomment', delcommentRoutes);
-
-
-dbConn.authenticate()
-.then(() => {
-console.log('Connection successful');
-const port = process.env.PORT || 6000;
-app.listen(port, () => {
-console.log(`Server listening on port ${port}`);
-});
-})
-.catch((err) => {
-console.log('Unable to connect:', err);
-});
+dbConn
+  .authenticate()
+  .then(() => {
+    console.log("Connection successful");
+    const port = process.env.PORT || 6000;
+    app.listen(port, () => {
+      console.log(`Server listening on port ${port}`);
+    });
+  })
+  .catch((err) => {
+    console.log("Unable to connect:", err);
+  });
